@@ -20,7 +20,11 @@ const getContactById = async (contactId) => {
 }
 
 const removeContact = async (contactId) => {
-
+  const data = await getAllData()
+  const result = data.find(( contact ) => contact.id.toString() === contactId);
+  const newData = data.filter((contact) => contact.id.toString() !== contactId)
+  await fs.writeFile(contacts, JSON.stringify(newData))
+  return result  
 }
 
 const addContact = async (body) => {
