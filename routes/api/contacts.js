@@ -1,5 +1,6 @@
 const express = require('express')
 const Contacts = require('../../model')
+const {validationCreateContact, validationUpdateContact} = require('../../validation/validation')
 
 const router = express.Router()
 
@@ -24,7 +25,7 @@ router.get('/:contactId', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', validationCreateContact,  async (req, res, next) => {
   const { name, email, phone } = req.body;
   try {
   const contacts = await Contacts.addContact(req.body)
@@ -49,7 +50,7 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 })
 
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:contactId', validationUpdateContact, async (req, res, next) => {
   try {
     const contact = await Contacts.updateContact(req.params.contactId ,req.body)
     if (!req.body) {
@@ -63,7 +64,7 @@ router.put('/:contactId', async (req, res, next) => {
   }
 })
 
-router.patch('/:contactId', async (req, res, next) => {
+router.patch('/:contactId', validationUpdateContact, async (req, res, next) => {
   try {
     const contact = await Contacts.updateContact(req.params.contactId ,req.body)
     if (!req.body) {
