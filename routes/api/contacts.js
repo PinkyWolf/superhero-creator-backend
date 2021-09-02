@@ -15,7 +15,8 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:contactId', async (req, res, next) => {
   try {
-    const contact = await Contacts.getContactById(req.params.contactId)
+    const {id} = req.params
+    const contact = await Contacts.getContactById(id)
     if (contact) {
      return res.json({ status: 'success', code: 200, data: { contact } })
     }
@@ -40,7 +41,8 @@ router.post('/', validationCreateContact,  async (req, res, next) => {
 
 router.delete('/:contactId', async (req, res, next) => {
   try {
-    const contact = await Contacts.removeContact(req.params.contactId)
+    const {id} = req.params
+    const contact = await Contacts.removeContact(id)
     if (contact) {
      return res.json({ status: 'success', code: 200, data: { contact } })
     }
@@ -52,7 +54,8 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', validationUpdateContact, async (req, res, next) => {
   try {
-    const contact = await Contacts.updateContact(req.params.contactId ,req.body)
+    const {id} = req.params
+    const contact = await Contacts.updateContact(id ,req.body)
     if (!req.body) {
         return res.json({status: 'error', code: 400, message: 'missing fields'});
     } else if (contact) {
@@ -66,7 +69,8 @@ router.put('/:contactId', validationUpdateContact, async (req, res, next) => {
 
 router.patch('/:contactId', validationUpdateContact, async (req, res, next) => {
   try {
-    const contact = await Contacts.updateContact(req.params.contactId ,req.body)
+    const {id} = req.params
+    const contact = await Contacts.updateContact(id ,req.body)
     if (!req.body) {
         return res.json({status: 'error', code: 400, message: 'missing fields'});
     } else if (contact) {
