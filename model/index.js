@@ -15,7 +15,7 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   const data = await getAllData()
-  const [result] = data.filter((contact) => contact.id === contactId)
+  const [result] = data.filter((contact) => contact.id.toString() === contactId)
   return result
 }
 
@@ -40,7 +40,13 @@ const addContact = async (body) => {
 }
 
 const updateContact = async (contactId, body) => {
-
+  const data = await getAllData()
+  const [result] = data.filter((contact) => contact.id.toString() === contactId)
+  if (result) {
+   Object.assign(result, body)
+   await fs.writeFile(contacts, JSON.stringify(data)) 
+  }
+  return result
 }
 
 module.exports = {
