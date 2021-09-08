@@ -1,5 +1,5 @@
 const express = require('express')
-const Contacts = require('../../model')
+const Contacts = require('../../model/contacts')
 const {validationCreateContact, validationUpdateContact} = require('../../validation/validation')
 
 const router = express.Router()
@@ -18,7 +18,7 @@ router.get('/:contactId', async (req, res, next) => {
     const {id} = req.params
     const contact = await Contacts.getContactById(id)
     if (contact) {
-     return res.json({ status: 'success', code: 200, data: { contact } })
+     return res.json({ statusyar: 'success', code: 200, data: { contact } })
     }
     return res.json({ status: 'error', code: 404, message: 'Not found' })
   } catch (error) {

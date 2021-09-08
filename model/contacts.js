@@ -1,12 +1,9 @@
-const fs = require('fs/promises')
-const path = require('path')
-const {v4: uuid} = require('uuid')
+const db = require('./db')
 
-const contacts = path.join( __dirname, 'contacts.json')
-
-const getAllData = async() => {
-  const data = await fs.readFile(contacts, 'utf-8')
-  return JSON.parse(data)
+const getCollection = async (db, name) => {
+  const client = await db
+  const collection = await client.db().collection(name);
+  return collection
 }
 
 const listContacts = async () => {
