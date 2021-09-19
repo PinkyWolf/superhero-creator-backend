@@ -1,6 +1,6 @@
 const express = require('express')
 const Contacts = require('../../model/contacts')
-const {validationCreateContact, validationUpdateContact} = require('../../validation/validation')
+const {validationCreateContact, validationUpdateContact} = require('../../validation')
 
 const router = express.Router()
 
@@ -15,10 +15,10 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:contactId', async (req, res, next) => {
   try {
-    const {id} = req.params
-    const contact = await Contacts.getContactById(id)
+    const {contactId} = req.params
+    const contact = await Contacts.getContactById(contactId)
     if (contact) {
-     return res.json({ statusyar: 'success', code: 200, data: { contact } })
+     return res.json({ status: 'success', code: 200, data: { contact } })
     }
     return res.json({ status: 'error', code: 404, message: 'Not found' })
   } catch (error) {
@@ -41,8 +41,8 @@ router.post('/', validationCreateContact,  async (req, res, next) => {
 
 router.delete('/:contactId', async (req, res, next) => {
   try {
-    const {id} = req.params
-    const contact = await Contacts.removeContact(id)
+    const {contactId} = req.params
+    const contact = await Contacts.removeContact(contactId)
     if (contact) {
      return res.json({ status: 'success', code: 200, data: { contact } })
     }
@@ -54,8 +54,8 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', validationUpdateContact, async (req, res, next) => {
   try {
-    const {id} = req.params
-    const contact = await Contacts.updateContact(id ,req.body)
+    const {contactId} = req.params
+    const contact = await Contacts.updateContact(contactId ,req.body)
     if (!req.body) {
         return res.json({status: 'error', code: 400, message: 'missing fields'});
     } else if (contact) {
@@ -67,10 +67,10 @@ router.put('/:contactId', validationUpdateContact, async (req, res, next) => {
   }
 })
 
-router.patch('/:contactId', validationUpdateContact, async (req, res, next) => {
+router.patch('/:contactId/favorite', validationUpdateContact, async (req, res, next) => {
   try {
-    const {id} = req.params
-    const contact = await Contacts.updateContact(id ,req.body)
+    const {contactId} = req.params
+    const contact = await Contacts.updateContact(contactId ,req.body)
     if (!req.body) {
         return res.json({status: 'error', code: 400, message: 'missing fields'});
     } else if (contact) {
