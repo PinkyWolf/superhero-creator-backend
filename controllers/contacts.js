@@ -1,9 +1,11 @@
+const { HttpCode, ErrorMessages } = require('../helpers/constants')
 const Contacts = require('../repositories/contacts')
+
 
 const getAll = async (req, res, next) => {
   try {
     const contacts = await Contacts.listContacts()
-    res.json({ status: 'success', code: 200, data: { contacts } })
+    res.json({ status: 'success', code: HttpCode.OK, data: { contacts } })
   } catch (error) {
     next(error)
   } 
@@ -14,9 +16,9 @@ const getById = async (req, res, next) => {
     const {contactId} = req.params
     const contact = await Contacts.getContactById(contactId)
     if (contact) {
-     return res.json({ status: 'success', code: 200, data: { contact } })
+     return res.json({ status: 'success', code: HttpCode.OK, data: { contact } })
     }
-    return res.json({ status: 'error', code: 404, message: 'Not found' })
+    return res.json({ status: 'error', code: HttpCode.NOT_FOUND, message: ErrorMessages.NOT_FOUND })
   } catch (error) {
     next(error)
   }
@@ -27,9 +29,9 @@ const addContact = async (req, res, next) => {
   try {
   const contacts = await Contacts.addContact(req.body)
     if (!name || !email || !phone) {
-    return res.status(400).json({ status: 'error', code: 400, message: 'missing required name field' })
+    return res.status(HttpCode.BAD_REQUEST).json({ status: 'error', code: HttpCode.BAD_REQUEST, message: 'missing required name field' })
   } 
-   return res.json({ status: 'success', code: 201, data: { contacts } })
+   return res.json({ status: 'success', code: HttpCode.CREATED, data: { contacts } })
   } catch (error) {
     next(error)
   } 
@@ -40,9 +42,9 @@ const removeContact = async (req, res, next) => {
     const {contactId} = req.params
     const contact = await Contacts.removeContact(contactId)
     if (contact) {
-     return res.json({ status: 'success', code: 200, data: { contact } })
+     return res.json({ status: 'success', code: HttpCode.OK, data: { contact } })
     }
-    return res.json({ status: 'error', code: 404, message: 'Not found' })
+    return res.json({ status: 'error', code: HttpCode.NOT_FOUND, message: ErrorMessages.NOT_FOUND })
   } catch (error) {
     next(error)
   }
@@ -53,11 +55,11 @@ const updateContact = async (req, res, next) => {
     const {contactId} = req.params
     const contact = await Contacts.updateContact(contactId ,req.body)
     if (!req.body) {
-        return res.json({status: 'error', code: 400, message: 'missing fields'});
+        return res.json({status: 'error', code: HttpCode.BAD_REQUEST, message: 'missing fields'});
     } else if (contact) {
-     return res.json({ status: 'success', code: 200, data: { contact } })
+     return res.json({ status: 'success', code: HttpCode.OK, data: { contact } })
     }
-    return res.json({ status: 'error', code: 404, message: 'Not found' })
+    return res.json({ status: 'error', code: HttpCode.NOT_FOUND, message: ErrorMessages.NOT_FOUND })
   } catch (error) {
     next(error)
   }
