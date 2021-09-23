@@ -5,7 +5,7 @@ const Schema = mongoose.Schema
 const phoneRegexp = /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/;
 const emailRegexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const userSchema = new Schema({
+const contactSchema = new Schema({
     name: {
         type: String,
         required: [true, 'Name required']
@@ -25,20 +25,23 @@ const userSchema = new Schema({
         default: false,
         required: [false]
     },
-},{versionKey: false, timesstamps: true})
+    owner: {
+    //   ref: 'user',
+    }
+},{versionKey: false, timestamps: true})
 
-const Contacts = mongoose.model('contacts', userSchema);
+const Contacts = mongoose.model('contacts', contactSchema);
 
 const schemaCreateContact = Joi.object({
     name: Joi.string().required(),
-    email: Joi.string().pattern(emailRegexp).required(),
+    email: Joi.string().pattern(emailRegexp).email().required(),
     phone: Joi.string().pattern(phoneRegexp).optional(),
     favorite: Joi.boolean().default(false).optional()
 })
 
 const schemaUpdateContact = Joi.object({
     name: Joi.string().optional(),
-    email: Joi.string().optional().pattern(emailRegexp),
+    email: Joi.string().optional().email().pattern(emailRegexp),
     phone: Joi.string().optional().pattern(phoneRegexp),
     favorite: Joi.boolean().default(false).optional()
 })
@@ -53,8 +56,9 @@ try {
         status: 400,
         message: error.message
     })
+    }
 }
-}
+
 module.exports = {
     validationCreateContact:(req, res, next) => {
         return validate(schemaCreateContact, req.body, next)
