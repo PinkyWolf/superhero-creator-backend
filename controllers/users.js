@@ -37,17 +37,37 @@ const login = async (req, res, next) => {
 }
 
 const logout = async (req, res, next) => {
+  const id = req.user.id
   try {
-    const contacts = await Users.listContacts()
-    res.json({ status: 'success', code: HttpCode.OK, data: { contacts } })
+    await Users.updatetoken(id, null)
+    res.status(HttpCode.NO_CONTENT).json({ message: ErrorMessages.no})
   } catch (error) {
     next(error)
   } 
 }
 
+const currentUser = async (req, res, next) => {
+  const id = req.user.id;
+  try {
+    const user = await Users.findById(id);
+    return res.status(HttpCode.OK).json({
+      status: 'success',
+      code: HttpCode.OK,
+      data: {
+        user: {
+          email: user.email,
+          subscription: user.subscription,
+        },
+      },
+    });
+  } catch (e) {
+    next(e);
+  }
+};
 
 module.exports = {
     register,
     login,
-    logout
+    logout,
+    currentUser
 }
