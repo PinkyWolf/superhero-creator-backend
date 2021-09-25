@@ -13,8 +13,9 @@ const HttpCode = {
 const ErrorMessages = {
   NOT_FOUND: 'Not found',
   EMAIL_ALREADY_USED: 'Email in use',
-  INVALID_CREDENTIALS: 'Invalid credentials'
-
+  INVALID_CREDENTIALS: 'Invalid credentials',
+  USER_NOT_FOUND: 'User not found',
+  
 }
 
 module.exports = {
