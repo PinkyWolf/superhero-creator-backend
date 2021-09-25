@@ -30,6 +30,7 @@ const login = async (req, res, next) => {
     const payload = { id }
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '3h' })
     await Users.updatetoken(id, token)
+    return res.json({ status: 'success', code: HttpCode.OK, data: {token}})
   } catch (error) {
     next(error)
   } 
