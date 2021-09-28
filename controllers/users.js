@@ -12,8 +12,8 @@ const register = async (req, res, next) => {
     if (user) {
       res.status(HttpCode.CONFLICT).json({ status: 'error', code: HttpCode.CONFLICT, message: ErrorMessages.EMAIL_ALREADY_USED })
     }
-    const { email, subscription } = await Users.create(req.body)
-    return res.status(HttpCode.CREATED).json({ status: 'success', code: HttpCode.CREATED, data:{email, subscription} })
+    const { email, subscription, avatar } = await Users.create(req.body)
+    return res.status(HttpCode.CREATED).json({ status: 'success', code: HttpCode.CREATED, data:{email, subscription, avatar} })
   } catch (error) {
     next(error)
   } 
