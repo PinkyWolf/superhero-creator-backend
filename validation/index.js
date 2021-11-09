@@ -1,72 +1,72 @@
-const Joi = require('joi');
-const mongoose = require('mongoose')
-const SchemaTypes = require('mongoose')
-const Schema = mongoose.Schema
+const Joi = require("joi");
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const phoneRegexp = /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/;
-const emailRegexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const contactSchema = new Schema(
+  {
+    nickname: {
+      type: String,
+      required: [true, "Nickname required"],
+    },
+    realName: {
+      type: String,
+      required: [false],
+    },
+    originDescription: {
+      type: String,
+      required: [true, "Small description of your hero required"],
+    },
+    superpowers: {
+      type: String,
+      required: [true, "At least 1 power required"],
+    },
+    catchPhrase: {
+      type: String,
+      required: [false],
+    },
+    avatarUrl: {
+      type: String,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
 
-const contactSchema = new Schema({
-    name: {
-        type: String,
-        required: [true, 'Name required']
-    },
-    email: {
-        type: String,
-        required: [true, 'Email required'],
-        match: [emailRegexp, 'Please fill a valid email address']
-    },
-    phone: {
-        type: String,
-        required: [false],
-        match: [phoneRegexp, 'Please fill a valid phone number']
-    },
-    favorite:  {
-        type: Boolean,
-        default: false,
-        required: [false]
-    },
-    owner: {
-      type: SchemaTypes.ObjectId,
-      ref: 'user',
-    }
-},{versionKey: false, timestamps: true})
-
-const Contacts = mongoose.model('contacts', contactSchema);
+const Heroes = mongoose.model("heroes", contactSchema);
 
 const schemaCreateContact = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().pattern(emailRegexp).email().required(),
-    phone: Joi.string().pattern(phoneRegexp).optional(),
-    favorite: Joi.boolean().default(false).optional()
-})
+  nickname: Joi.string().required(),
+  realName: Joi.string().optional(),
+  originDescription: Joi.string().optional(),
+  superpowers: Joi.string().required(),
+  catchPhrase: Joi.string().optional(),
+});
 
 const schemaUpdateContact = Joi.object({
-    name: Joi.string().optional(),
-    email: Joi.string().optional().email().pattern(emailRegexp),
-    phone: Joi.string().optional().pattern(phoneRegexp),
-    favorite: Joi.boolean().default(false).optional()
-})
-
+  nickname: Joi.string().optional(),
+  realName: Joi.string().optional(),
+  originDescription: Joi.string().optional(),
+  superpowers: Joi.string().optional(),
+  catchPhrase: Joi.string().optional(),
+});
 
 const validate = async (schema, obj, next) => {
-try {
-    await schema.validateAsync(obj)
-    next()
-} catch (error) {
+  try {
+    await schema.validateAsync(obj);
+    next();
+  } catch (error) {
     next({
-        status: 400,
-        message: error.message
-    })
-    }
-}
+      status: 400,
+      message: error.message,
+    });
+  }
+};
 
 module.exports = {
-    validationCreateContact:(req, res, next) => {
-        return validate(schemaCreateContact, req.body, next)
-    },
-    validationUpdateContact:(req, res, next) => {
-        return validate(schemaUpdateContact, req.body, next)
-    },
-    Contacts
-}
+  validationCreateContact: (req, res, next) => {
+    return validate(schemaCreateContact, req.body, next);
+  },
+  validationUpdateContact: (req, res, next) => {
+    return validate(schemaUpdateContact, req.body, next);
+  },
+  Heroes,
+};

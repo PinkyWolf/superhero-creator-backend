@@ -1,8 +1,7 @@
-const multer = require('multer')
-const path = require('path')
-require('dotenv').config
+const multer = require("multer");
+require("dotenv").config();
 
-const UPLOAD_DIR = process.env.UPLOAD_DIR
+const UPLOAD_DIR = process.env.UPLOAD_DIR;
 
 const storage = multer.diskStorage({
   destination: function (_req, _file, cb) {
@@ -17,7 +16,7 @@ const upload = multer({
   storage: storage,
   limits: { fileSize: 2000000 },
   fileFilter: (req, file, cb) => {
-    if (file.mimetype.includes('image')) {
+    if (file.mimetype.includes("image")) {
       cb(null, true);
       return;
     }
