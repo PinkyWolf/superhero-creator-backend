@@ -18,8 +18,6 @@ router.delete("/:heroId", ctrl.removeHero);
 
 router.put("/:heroId", validationUpdateContact, ctrl.updateHero);
 
-router.patch("/:heroId/favorite", validationUpdateContact, ctrl.updateHero);
-
 router.patch("/avatars", upload.single("avatar"), ctrl.createAvatar);
 
 module.exports = router;

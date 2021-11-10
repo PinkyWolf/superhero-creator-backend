@@ -4,7 +4,7 @@ const UploadAvatarService = require("../services/local-upload");
 
 const getAll = async (req, res, next) => {
   try {
-    const heroes = await Heroes.listContacts();
+    const heroes = await Heroes.listHeroes();
     res.json({ status: "success", code: HttpCode.OK, data: { heroes } });
   } catch (error) {
     next(error);
@@ -14,7 +14,7 @@ const getAll = async (req, res, next) => {
 const getById = async (req, res, next) => {
   try {
     const { heroId } = req.params;
-    const hero = await Heroes.getContactById(heroId);
+    const hero = await Heroes.getHeroById(heroId);
     if (hero) {
       return res.json({
         status: "success",

@@ -2,7 +2,7 @@ const Joi = require("joi");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const contactSchema = new Schema(
+const heroSchema = new Schema(
   {
     nickname: {
       type: String,
@@ -31,9 +31,9 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-const Heroes = mongoose.model("heroes", contactSchema);
+const Heroes = mongoose.model("heroes", heroSchema);
 
-const schemaCreateContact = Joi.object({
+const schemaCreateHero = Joi.object({
   nickname: Joi.string().required(),
   realName: Joi.string().optional(),
   originDescription: Joi.string().optional(),
@@ -41,7 +41,7 @@ const schemaCreateContact = Joi.object({
   catchPhrase: Joi.string().optional(),
 });
 
-const schemaUpdateContact = Joi.object({
+const schemaUpdateHero = Joi.object({
   nickname: Joi.string().optional(),
   realName: Joi.string().optional(),
   originDescription: Joi.string().optional(),
@@ -63,10 +63,10 @@ const validate = async (schema, obj, next) => {
 
 module.exports = {
   validationCreateContact: (req, res, next) => {
-    return validate(schemaCreateContact, req.body, next);
+    return validate(schemaCreateHero, req.body, next);
   },
   validationUpdateContact: (req, res, next) => {
-    return validate(schemaUpdateContact, req.body, next);
+    return validate(schemaUpdateHero, req.body, next);
   },
   Heroes,
 };
